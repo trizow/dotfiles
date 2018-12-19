@@ -9,11 +9,13 @@ My dotfiles.
 
 ## Install
 Installation shell script will backup and link dotfiles.
-`
+``
 $ ./isntall.sh
-`
-After install download and update plugins for vim
-`
+``
+
+After install download and update plugins for vim.
+``
 :PlugUpdate
-`
+``
+
 

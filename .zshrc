@@ -108,11 +108,18 @@ source ~/.oh-my-zsh/custom/themes/powerlevel9k
 # Add findutils
 PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
 
+# NVM
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
+export PATH=/usr/local/share/npm/bin:$PATH
+
+# Some exports
+export EDITOR="vim"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/troybebee/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/troybebee/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/troybebee/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/troybebee/google-cloud-sdk/completion.zsh.inc'; fi
+
+

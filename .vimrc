@@ -121,7 +121,7 @@ let g:terraform_registry_module_completion = 0
 
 "  Enable completion where available.
 " This setting must be set before ALE is loaded.
-let g:ale_completion_enabled = 1
+let g:ale_completion_enabled = 0
 " Fix files with prettier, and then ESLint.
 let b:ale_fixers = ['prettier', 'eslint']
 " Set this. Airline will handle the rest.
@@ -137,6 +137,7 @@ augroup lexical
 	autocmd FileType textile call lexical#init()
 	autocmd FileType text call lexical#init({ 'spell': 0 })
 augroup END
+let g:lexical#spell_key = 'ß'
 
 
 

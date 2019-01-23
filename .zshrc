@@ -3,7 +3,7 @@
 export TERM="xterm-256color"
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/troybebee/.oh-my-zsh"
+export ZSH="/home/troy.bebee/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -108,18 +108,19 @@ source ~/.oh-my-zsh/custom/themes/powerlevel9k
 # Add findutils
 PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
 
-# NVM
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
-export PATH=/usr/local/share/npm/bin:$PATH
-
 # Some exports
 export EDITOR="vim"
 
+# Go binary paths
+export GOPATH="$HOME/.goimports"
+export GOROOT="$HOME/go"
+export GOBIN="$GOROOT/bin"
+export PATH="$GOBIN:$PATH"
+
+
+
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/troybebee/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/troybebee/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f $HOME'/google-cloud-sdk/path.zsh.inc' ]; then . $HOME'/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/troybebee/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/troybebee/google-cloud-sdk/completion.zsh.inc'; fi
-
-
+if [ -f $HOME'/google-cloud-sdk/completion.zsh.inc' ]; then . $HOME'/google-cloud-sdk/completion.zsh.inc'; fi

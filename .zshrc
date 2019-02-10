@@ -108,6 +108,9 @@ source ~/.oh-my-zsh/custom/themes/powerlevel9k
 # Add findutils
 PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
 
+# android studio
+PATH="$PATH:$HOME/android-studio/bin"
+
 # Some exports
 export EDITOR="vim"
 
@@ -116,7 +119,6 @@ export GOPATH="$HOME/.goimports"
 export GOROOT="$HOME/go"
 export GOBIN="$GOROOT/bin"
 export PATH="$GOBIN:$PATH"
-
 
 
 # The next line updates PATH for the Google Cloud SDK.

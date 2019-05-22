@@ -4,7 +4,7 @@ SCRIPTDIR="$( cd "$(dirname "$0")" || exit 1 ; pwd -P )"
 echo "$SCRIPTDIR"
 #set -x
 
-for i in .zshrc .vimrc .tmux.conf .fzf.zsh; do 
+for i in .vim_go_runtime .zshrc .vimrc .tmux.conf .fzf.zsh; do 
     if [ -e "$HOME/$i" ]; then
         if [ ! -f "$HOME/$i-backup" ]; then
             echo "Backup of previous $i"

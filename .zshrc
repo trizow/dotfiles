@@ -64,10 +64,7 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git
-  docker
-  zsh-syntax-highlighting
-  zsh-autosuggestions
+ zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -98,12 +95,11 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
- alias zshconfig="mate ~/.zshrc"
- alias ohmyzsh="mate ~/.oh-my-zsh"
+alias zshconfig="mate ~/.zshrc"
+alias ohmyzsh="mate ~/.oh-my-zsh"
+alias python=/usr/bin/python3.7
 #source  ~/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k.zsh-theme 
 source ~/.oh-my-zsh/custom/themes/powerlevel9k
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Add findutils
 PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
@@ -115,10 +111,10 @@ PATH="$PATH:$HOME/android-studio/bin"
 export EDITOR="vim"
 
 # Go binary paths
-export GOPATH="$HOME/.goimports"
+export GOPATH="$HOME/.goimports:$HOME/exercism/go:$HOME/code/kasna/go"
 export GOROOT="$HOME/go"
 export GOBIN="$GOROOT/bin"
-export PATH="$GOBIN:$PATH"
+export PATH="$GOBIN:$GOPATH/bin:$PATH"
 
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -129,3 +125,14 @@ if [ -f $HOME'/google-cloud-sdk/completion.zsh.inc' ]; then . $HOME'/google-clou
 
 # Linux Brew
 export PATH="$HOME/.linuxbrew/bin:$PATH"
+
+# Flutter
+export PATH="$PATH:$HOME/apps/flutter/bin"
+source /home/troy.bebee/tmp/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# VTE and Tilix
+if [ $TILIX_ID  ] || [ $VTE_VERSION  ]; then
+    source /etc/profile.d/vte.sh
+fi

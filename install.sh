@@ -19,4 +19,4 @@ for i in .vim_go_runtime .zshrc .vimrc .tmux.conf .fzf.zsh; do
     fi
 done
 
-sudo cp "$SCRIPTDIR/dev-tmux" /usr/local/bin/
+#sudo cp "$SCRIPTDIR/dev-tmux" /usr/local/bin/

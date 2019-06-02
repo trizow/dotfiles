@@ -128,9 +128,6 @@ export PATH="$HOME/.linuxbrew/bin:$PATH"
 
 # Flutter
 export PATH="$PATH:$HOME/apps/flutter/bin"
-source ${HOME}/code/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # VTE and Tilix
 if [ $TILIX_ID  ] || [ $VTE_VERSION  ]; then

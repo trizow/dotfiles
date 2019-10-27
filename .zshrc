@@ -10,6 +10,7 @@ export ZSH="${HOME}/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel9k/powerlevel9k"
+POWERLEVEL9K_MODE="nerdfont-complete"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -104,14 +105,11 @@ source ~/.oh-my-zsh/custom/themes/powerlevel9k
 # Add findutils
 PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
 
-# android studio
-PATH="$PATH:$HOME/android-studio/bin"
-
 # Some exports
 export EDITOR="vim"
 
 # Go binary paths
-export GOPATH="$HOME/.goimports:$HOME/exercism/go:$HOME/code/kasna/go"
+export GOPATH="$HOME/go"
 export GOROOT="$HOME/go"
 export GOBIN="$GOROOT/bin"
 export PATH="$GOBIN:$GOPATH/bin:$PATH"
@@ -123,9 +121,6 @@ if [ -f $HOME'/google-cloud-sdk/path.zsh.inc' ]; then . $HOME'/google-cloud-sdk/
 # The next line enables shell command completion for gcloud.
 if [ -f $HOME'/google-cloud-sdk/completion.zsh.inc' ]; then . $HOME'/google-cloud-sdk/completion.zsh.inc'; fi
 
-# Linux Brew
-export PATH="$HOME/.linuxbrew/bin:$PATH"
-
 # Flutter
 export PATH="$PATH:$HOME/apps/flutter/bin"
 
@@ -133,3 +128,25 @@ export PATH="$PATH:$HOME/apps/flutter/bin"
 if [ $TILIX_ID  ] || [ $VTE_VERSION  ]; then
     source /etc/profile.d/vte.sh
 fi
+export PATH="$PATH:\
+/home/troy.bebee/bin:\
+/home/troy.bebee/.linuxbrew/bin:\
+/home/troy.bebee/google-cloud-sdk/bin:\
+/home/troy.bebee/go/bin:\
+/home/troy.bebee/exercism/go:\
+/home/troy.bebee/code/kasna/go/bin:\
+/usr/local/opt/findutils/libexec/gnubin:\
+/usr/local/sbin:\
+/usr/local/bin:\
+/usr/local/games:\
+/usr/sbin:\
+/usr/bin:\
+/usr/games:\
+/sbin:/bin:\
+/home/troy.bebee/android-studio/bin:\
+/home/troy.bebee/apps/flutter/bin:\
+/home/troy.bebee/.pulumi/bin:\
+/home/troy.bebee/.local/bin"
+
+# add Pulumi to the PATH
+export PATH=$PATH:$HOME/.pulumi/bin

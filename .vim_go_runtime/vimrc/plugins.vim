@@ -41,6 +41,10 @@ Plug 'udalov/kotlin-vim'
 " Solarized
 Plug 'altercation/vim-colors-solarized'
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+Plug 'flazz/vim-colorschemes'
+"
+Plug 'szymonmaszke/vimpyter'
+"
 Plug 'junegunn/vim-easy-align'
 " Tabline
 Plug 'vim-airline/vim-airline'
@@ -55,7 +59,8 @@ Plug 'scrooloose/nerdtree'
 " Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
 Plug 'fatih/vim-go', { 'tag': '*' }
 " Plugin outside ~/.vim/plugged with post-update hook
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
 " Powershell
 Plug 'pprovost/vim-ps1'
 " Lexical
@@ -67,6 +72,13 @@ Plug 'python-mode/python-mode', { 'branch': 'develop'  }
 Plug 'tmhedberg/simpylfold'
 " JSON support
 Plug 'elzr/vim-json'
+" Typescript
+Plug 'leafgarland/typescript-vim'
+" C&C++
+Plug 'vim-scripts/c.vim'
+" REgo
+Plug 'tsandall/vim-rego'
+
 
 " Initialize plugin system
 call plug#end()
@@ -92,7 +104,8 @@ let NERDTreeWinSize = 35
 " Make sure that when NT root is changed, Vim's pwd is also updated
 let NERDTreeChDirMode = 2
 let NERDTreeShowLineNumbers = 1
-let NERDTreeAutoCenter = 1
+"let NERDTreeAut
+"Center = 1
 
 " Open NERDTree on startup, when no file has been specified
 autocmd VimEnter * if !argc() | NERDTree | endif
@@ -236,6 +249,11 @@ let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
 "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
+let g:formatdef_rego = '"opa fmt"'
+let g:formatters_rego = ['rego']
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+au BufWritePre *.rego Autoformat
 
 "------------------------------------------------------------------------------
 " Vim-go

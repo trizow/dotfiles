@@ -25,10 +25,12 @@ setlocal noexpandtab
 
 compiler go
 
-" Set autocompletion
-setlocal omnifunc=go#complete#Complete
-if !go#util#has_job()
-  setlocal omnifunc=go#complete#GocodeComplete
+if go#config#CodeCompletionEnabled()
+  " Set autocompletion
+  setlocal omnifunc=go#complete#Complete
+  if !go#util#has_job()
+    setlocal omnifunc=go#complete#GocodeComplete
+  endif
 endif
 
 if get(g:, "go_doc_keywordprg_enabled", 1)
@@ -72,18 +74,14 @@ if get(g:, "go_textobj_enabled", 1)
   xnoremap <buffer> <silent> [[ :<c-u>call go#textobj#FunctionJump('v', 'prev')<cr>
 endif
 
-if go#config#AutoTypeInfo() || go#config#AutoSameids()
-  let &l:updatetime= get(g:, "go_updatetime", 800)
-endif
-
 " Autocommands
 " ============================================================================
 "
 augroup vim-go-buffer
   autocmd! * <buffer>
 
-  " The file is registered (textDocument/DidOpen) with gopls in in
-  " plugin/go.vim on the FileType event.
+  " The file is registered (textDocument/DidOpen) with gopls in plugin/go.vim
+  " on the FileType event.
   " TODO(bc): handle all the other events that may be of interest to gopls,
   " too (e.g.  BufFilePost , CursorHold , CursorHoldI, FileReadPost,
   " StdinReadPre, BufWritePost, TextChange, TextChangedI)
@@ -93,8 +91,7 @@ augroup vim-go-buffer
     autocmd BufDelete <buffer> call go#lsp#DidClose(expand('<afile>:p'))
   endif
 
-  autocmd CursorHold <buffer> call go#auto#auto_type_info()
-  autocmd CursorHold <buffer> call go#auto#auto_sameids()
+  autocmd BufEnter,CursorHold <buffer> call go#auto#update_autocmd()
 
   " Echo the identifier information when completion is done. Useful to see
   " the signature of a function, etc...

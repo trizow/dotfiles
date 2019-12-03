@@ -1,6 +1,6 @@
 "============================================================================
 "File:        checkbashisms.vim
-"Description: Shell script syntax/style checking plugin for syntastic
+"Description: Shell script syntax/style checking plugin for syntastic.vim
 "Notes:       checkbashisms.pl can be downloaded from
 "             http://debian.inode.at/debian/pool/main/d/devscripts/
 "             as part of the devscripts package.

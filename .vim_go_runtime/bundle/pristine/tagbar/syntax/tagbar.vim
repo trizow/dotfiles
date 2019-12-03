@@ -3,17 +3,16 @@
 " Author:      Jan Larres <jan@majutsushi.net>
 " Licence:     Vim licence
 " Website:     http://majutsushi.github.com/tagbar/
-" Version:     2.7
+" Version:     2.6.1
 
 scriptencoding utf-8
 
-if exists('b:current_syntax')
+if exists("b:current_syntax")
     finish
 endif
 
 let s:ics = escape(join(g:tagbar_iconchars, ''), ']^\-')
-
-let s:pattern = '\(^[' . s:ics . '] \?\)\@3<=[^-+: ]\+[^:]\+$'
+let s:pattern = '\(^[' . s:ics . '] \?\)\@<=[^-+: ]\+[^:]\+$'
 execute "syntax match TagbarKind '" . s:pattern . "'"
 
 let s:pattern = '\(\S\@<![' . s:ics . '][-+# ]\?\)\@<=[^*(]\+\(\*\?\(([^)]\+)\)\? :\)\@='
@@ -59,6 +58,6 @@ highlight default link TagbarVisibilityPublic    TagbarAccessPublic
 highlight default link TagbarVisibilityProtected TagbarAccessProtected
 highlight default link TagbarVisibilityPrivate   TagbarAccessPrivate
 
-let b:current_syntax = 'tagbar'
+let b:current_syntax = "tagbar"
 
 " vim: ts=8 sw=4 sts=4 et foldenable foldmethod=marker foldcolumn=1

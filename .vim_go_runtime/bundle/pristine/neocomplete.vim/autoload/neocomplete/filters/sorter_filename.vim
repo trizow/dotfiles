@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neocomplete#filters#sorter_filename#define() abort "{{{
+function! neocomplete#filters#sorter_filename#define() "{{{
   return s:sorter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:sorter = {
       \ 'description' : 'sort by filename order',
       \}
 
-function! s:sorter.filter(context) abort "{{{
+function! s:sorter.filter(context) "{{{
   let dir_list = filter(copy(a:context.candidates),
         \ 'v:val.action__is_directory')
   let file_list = filter(copy(a:context.candidates),

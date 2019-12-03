@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neocomplete#filters#fuzzy_escape(string) abort "{{{
+function! neocomplete#filters#fuzzy_escape(string) "{{{
   " Escape string for lua regexp.
   let string = substitute(neocomplete#filters#escape(a:string),
         \ '\w', '\0.*', 'g')
@@ -36,7 +36,7 @@ function! neocomplete#filters#fuzzy_escape(string) abort "{{{
   return string
 endfunction"}}}
 
-function! neocomplete#filters#escape(string) abort "{{{
+function! neocomplete#filters#escape(string) "{{{
   " Escape string for lua regexp.
   return substitute(a:string,
         \ '[%\[\]().*+?^$-]', '%\0', 'g')

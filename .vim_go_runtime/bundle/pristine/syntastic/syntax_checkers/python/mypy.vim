@@ -1,6 +1,6 @@
 "============================================================================
 "File:        mypy.vim
-"Description: Syntax checking plugin for syntastic
+"Description: Syntax checking plugin for syntastic.vim
 "Author:      Russ Hewgill <Russ dot Hewgill at gmail dot com>
 "
 "============================================================================
@@ -14,23 +14,15 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_python_mypy_GetLocList() dict
-    if !exists('s:mypy_new')
-        " creative versioning: version string has changed from v0.4.6 to v0.470
-        " XXX the test should be fine for now, since 470 > 4
-        let s:mypy_new = syntastic#util#versionIsAtLeast(self.getVersion(), [0, 4, 5])
-    endif
+    let makeprg = self.makeprgBuild({})
 
-    let makeprg = self.makeprgBuild({ 'args_after': (s:mypy_new ? '--show-column-numbers' : '') })
-
-    let errorformat =
-        \ '%f:%l:%c:%t:%m,' .
-        \ '%f:%l:%t:%m'
+    let errorformat = '%f\, line %l: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'returns': [0, 1],
-        \ 'preprocess': 'mypy' })
+        \ 'defaults': { 'type': 'E' },
+        \ 'returns': [0, 1] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

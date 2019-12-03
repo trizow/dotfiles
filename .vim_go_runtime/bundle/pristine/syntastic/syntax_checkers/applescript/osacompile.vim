@@ -1,6 +1,6 @@
 "==============================================================================
 "       FileName: applescript.vim
-"           Desc: Syntax checking plugin for syntastic
+"           Desc: Syntax checking plugin for syntastic.vim
 "         Author: Zhao Cai
 "          Email: caizhaoff@gmail.com
 "        Version: 0.2.1

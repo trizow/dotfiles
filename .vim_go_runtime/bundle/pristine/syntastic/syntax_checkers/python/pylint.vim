@@ -1,6 +1,6 @@
 "============================================================================
 "File:        pylint.vim
-"Description: Syntax checking plugin for syntastic
+"Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Parantapa Bhattacharya <parantapa at gmail dot com>
 "
 "============================================================================
@@ -19,7 +19,7 @@ set cpo&vim
 
 let s:pylint_new = -1
 
-function! SyntaxCheckers_python_pylint_IsAvailable() dict " {{{1
+function! SyntaxCheckers_python_pylint_IsAvailable() dict
     if !executable(self.getExec())
         return 0
     endif
@@ -45,9 +45,9 @@ function! SyntaxCheckers_python_pylint_IsAvailable() dict " {{{1
     endtry
 
     return s:pylint_new >= 0
-endfunction " }}}1
+endfunction
 
-function! SyntaxCheckers_python_pylint_GetLocList() dict " {{{1
+function! SyntaxCheckers_python_pylint_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args_after': (s:pylint_new ?
         \       '-f text --msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg}" -r n' :
@@ -86,7 +86,7 @@ function! SyntaxCheckers_python_pylint_GetLocList() dict " {{{1
     endfor
 
     return loclist
-endfunction " }}}1
+endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',

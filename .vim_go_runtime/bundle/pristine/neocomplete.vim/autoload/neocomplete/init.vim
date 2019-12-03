@@ -30,14 +30,14 @@ if !exists('s:is_enabled')
   let s:is_enabled = 0
 endif
 
-function! neocomplete#init#enable() abort "{{{
+function! neocomplete#init#enable() "{{{
   if neocomplete#is_enabled()
     return
   endif
 
   if !(has('lua') && (v:version > 703 || v:version == 703 && has('patch885')))
     echomsg 'neocomplete does not work with this version of Vim.'
-    echomsg 'neocomplete requires Vim 7.3.885 or later with Lua support ("+lua").'
+    echomsg 'It requires Vim 7.3.885 or later with Lua support ("+lua").'
     return
   endif
 
@@ -55,7 +55,7 @@ function! neocomplete#init#enable() abort "{{{
   doautocmd <nomodeline> neocomplete InsertEnter
 endfunction"}}}
 
-function! neocomplete#init#disable() abort "{{{
+function! neocomplete#init#disable() "{{{
   if !neocomplete#is_enabled()
     return
   endif
@@ -73,11 +73,11 @@ function! neocomplete#init#disable() abort "{{{
         \ 'on_final', {})
 endfunction"}}}
 
-function! neocomplete#init#is_enabled() abort "{{{
+function! neocomplete#init#is_enabled() "{{{
   return s:is_enabled
 endfunction"}}}
 
-function! neocomplete#init#_autocmds() abort "{{{
+function! neocomplete#init#_autocmds() "{{{
   augroup neocomplete
     autocmd!
     autocmd InsertEnter *
@@ -86,24 +86,50 @@ function! neocomplete#init#_autocmds() abort "{{{
           \ call neocomplete#handler#_on_insert_leave()
     autocmd CursorMovedI *
           \ call neocomplete#handler#_on_moved_i()
+    autocmd BufWritePost *
+          \ call neocomplete#handler#_on_write_post()
+    autocmd VimLeavePre *
+          \ call neocomplete#init#disable()
     autocmd InsertCharPre *
           \ call neocomplete#handler#_on_insert_char_pre()
     autocmd TextChangedI *
           \ call neocomplete#handler#_on_text_changed()
-    autocmd CompleteDone *
-          \ call neocomplete#handler#_on_complete_done()
+    autocmd VimLeavePre *
+          \ call neocomplete#init#disable()
   augroup END
 
-  let event = neocomplete#util#is_text_changed() ?
-        \  'TextChangedI' : 'CursorMovedI'
-  execute 'autocmd neocomplete' event '*'
-        \ 'call neocomplete#handler#_do_auto_complete("'.event.'")'
+  if g:neocomplete#enable_cursor_hold_i
+    augroup neocomplete
+      autocmd CursorHoldI *
+            \ call neocomplete#handler#_do_auto_complete('CursorHoldI')
+      autocmd InsertEnter *
+            \ call neocomplete#handler#_change_update_time()
+      autocmd InsertLeave *
+            \ call neocomplete#handler#_restore_update_time()
+    augroup END
+  else
+    " Note: Vim 7.4.143 fixed TextChangedI bug.
+    let event =
+          \ (g:neocomplete#enable_insert_char_pre) ?
+          \  'InsertCharPre' :
+          \ (v:version > 704 || v:version == 704 && has('patch143')) ?
+          \  'TextChangedI' : 'CursorMovedI'
+    execute 'autocmd neocomplete' event '*'
+          \ 'call neocomplete#handler#_do_auto_complete("'.event.'")'
+  endif
 
-  autocmd neocomplete InsertEnter *
-        \ call neocomplete#handler#_do_auto_complete('InsertEnter')
+  if !g:neocomplete#enable_cursor_hold_i
+    autocmd neocomplete InsertEnter *
+          \ call neocomplete#handler#_do_auto_complete('InsertEnter')
+  endif
+
+  if exists('v:completed_item')
+    autocmd neocomplete CompleteDone *
+          \ call neocomplete#handler#_on_complete_done()
+  endif
 endfunction"}}}
 
-function! neocomplete#init#_others() abort "{{{
+function! neocomplete#init#_others() "{{{
   call neocomplete#init#_variables()
 
   call neocomplete#commands#_initialize()
@@ -129,9 +155,12 @@ function! neocomplete#init#_others() abort "{{{
 
   command! -nargs=0 -bar NeoCompleteDisable
         \ call neocomplete#init#disable()
+
+  " Set for echodoc.
+  call neocomplete#echodoc#init()
 endfunction"}}}
 
-function! neocomplete#init#_variables() abort "{{{
+function! neocomplete#init#_variables() "{{{
   " Initialize keyword patterns. "{{{
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#keyword_patterns',
@@ -150,19 +179,21 @@ function! neocomplete#init#_variables() abort "{{{
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#keyword_patterns',
         \'ruby,int-irb',
-        \'^=\%(b\%[egin]\|e\%[nd]\)\|\%(@@\|[$@]\)\h\w*\|\h\w*[!?]\?')
+        \'^=\%(b\%[egin]\|e\%[nd]\)\|\%(@@\|[$@]\)\h\w*\|\h\w*\%(::\w*\)*[!?]\?')
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#keyword_patterns',
         \'php,int-php',
-        \'</\?\%(\h[[:alnum:]_-]*\s*\)\?\%(/\?>\)\?\|\$\h\w*\|\h\w*')
+        \'</\?\%(\h[[:alnum:]_-]*\s*\)\?\%(/\?>\)\?'.
+        \'\|\$\h\w*\|\h\w*\%(\%(\\\|::\)\w*\)*')
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#keyword_patterns',
         \'perl,int-perlsh',
-        \'<\h\w*>\?\|[$@%&*]\h\w*\|\h\w*')
+        \'<\h\w*>\?\|[$@%&*]\h\w*\|\h\w*\%(::\w*\)*')
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#keyword_patterns',
         \'perl6,int-perl6',
-        \'<\h\w*>\?\|[$@%&][!.*?]\?\h[[:alnum:]_-]*\|\h[[:alnum:]_-]*')
+        \'<\h\w*>\?\|[$@%&][!.*?]\?\h[[:alnum:]_-]*'.
+        \'\|\h[[:alnum:]_-]*\%(::[[:alnum:]_-]*\)*')
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#keyword_patterns',
         \'pir',
@@ -262,7 +293,7 @@ function! neocomplete#init#_variables() abort "{{{
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#keyword_patterns',
         \'css,stylus,scss,less',
-        \'[@#.]\?[[:alpha:]_-][[:alnum:]_-]*')
+        \'[@#.]\?[[:alpha:]_:-][[:alnum:]_:-]*')
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#keyword_patterns',
         \'tags',
@@ -361,6 +392,125 @@ function! neocomplete#init#_variables() abort "{{{
         \'\h[[:alnum:]_.-]*')
   "}}}
 
+  " Initialize same file types. "{{{
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'c', 'cpp')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'cpp', 'c')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'erb', 'ruby,html,xhtml')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'html,xml', 'xhtml')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'html,xhtml', 'css,stylus,less')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'css', 'scss')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'scss', 'css')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'stylus', 'css')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'less', 'css')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'xhtml', 'html,xml')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'help', 'vim')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'tex', 'bib,plaintex')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'plaintex', 'bib,tex')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'lingr-say', 'lingr-messages,lingr-members')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'J6uil_say', 'J6uil')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'vimconsole', 'vim')
+
+  " Interactive filetypes.
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-irb', 'ruby')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-ghci,int-hugs', 'haskell')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-python,int-ipython', 'python')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-gosh', 'scheme')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-clisp', 'lisp')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-erl', 'erlang')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-zsh', 'zsh')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-bash', 'bash')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-sh', 'sh')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-cmdproxy', 'dosbatch')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-powershell', 'powershell')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-perlsh', 'perl')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-perl6', 'perl6')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-ocaml', 'ocaml')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-clj,int-lein', 'clojure')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-sml,int-smlsharp', 'sml')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-js,int-kjs,int-rhino', 'javascript')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-coffee', 'coffee')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-gdb', 'gdb')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-scala', 'scala')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-nyaos', 'nyaos')
+  call neocomplete#util#set_default_dictionary(
+        \ 'g:neocomplete#same_filetypes',
+        \ 'int-php', 'php')
+  "}}}
+
   " Initialize delimiter patterns. "{{{
   call neocomplete#util#set_default_dictionary(
         \ 'g:neocomplete#delimiter_patterns',
@@ -396,11 +546,8 @@ function! neocomplete#init#_variables() abort "{{{
   " Initialize text mode filetypes. "{{{
   call neocomplete#util#set_default_dictionary(
         \ 'g:neocomplete#text_mode_filetypes',
-        \ join(['hybrid', 'text', 'help', 'tex', 'gitcommit', 'gitrebase',
-        \       'vcs-commit', 'markdown', 'mkd', 'textile', 'creole',
-        \       'org', 'rdoc', 'mediawiki', 'rst', 'asciidoc', 'pod',
-        \       'gita-commit', 'J6uil_say',
-        \ ], ','), 1)
+        \ 'hybrid,text,help,tex,gitcommit,gitrebase,vcs-commit,markdown,mkd,'.
+        \ 'textile,creole,org,rdoc,mediawiki,rst,asciidoc,pod', 1)
   "}}}
 
   " Initialize tags filter patterns. "{{{
@@ -426,7 +573,7 @@ function! neocomplete#init#_variables() abort "{{{
   endif
 endfunction"}}}
 
-function! neocomplete#init#_current_neocomplete() abort "{{{
+function! neocomplete#init#_current_neocomplete() "{{{
   let b:neocomplete = {
         \ 'context' : {
         \      'input' : '',
@@ -438,8 +585,10 @@ function! neocomplete#init#_current_neocomplete() abort "{{{
         \ 'skip_next_complete' : 0,
         \ 'filetype' : '',
         \ 'context_filetype' : '',
-        \ 'context_filetypes' : [],
+        \ 'context_filetype_range' :
+        \    [[1, 1], [line('$'), len(getline('$'))+1]],
         \ 'completion_length' : -1,
+        \ 'update_time_save' : &updatetime,
         \ 'foldinfo' : [],
         \ 'skipped' : 0,
         \ 'event' : '',
@@ -456,12 +605,12 @@ function! neocomplete#init#_current_neocomplete() abort "{{{
         \ 'start_time' : reltime(),
         \ 'linenr' : 0,
         \ 'completeopt' : &completeopt,
+        \ 'overlapped_items' : {},
         \ 'sources' : [],
         \ 'sources_filetype' : '',
         \ 'within_comment' : 0,
         \ 'is_auto_complete' : 0,
         \ 'indent_text' : '',
-        \ 'detected_foldmethod' : 0,
         \ 'default_matchers' : neocomplete#init#_filters(
         \  (g:neocomplete#enable_fuzzy_completion ?
         \   ['matcher_fuzzy'] : ['matcher_head'])
@@ -469,7 +618,7 @@ function! neocomplete#init#_current_neocomplete() abort "{{{
         \}
 endfunction"}}}
 
-function! neocomplete#init#_sources(names) abort "{{{
+function! neocomplete#init#_sources(names) "{{{
   if !exists('s:loaded_source_files')
     " Initialize.
     let s:loaded_source_files = {}
@@ -517,7 +666,7 @@ function! neocomplete#init#_sources(names) abort "{{{
   endfor
 endfunction"}}}
 
-function! neocomplete#init#_source(source) abort "{{{
+function! neocomplete#init#_source(source) "{{{
   let default = {
         \ 'is_volatile' : 0,
         \ 'max_candidates' : 0,
@@ -525,15 +674,15 @@ function! neocomplete#init#_source(source) abort "{{{
         \ 'disabled' : 0,
         \ 'disabled_filetypes' : {},
         \ 'hooks' : {},
+        \ 'mark' : '',
         \ 'matchers' : [],
         \ 'sorters' : ['sorter_rank'],
         \ 'converters' : [
         \      'converter_remove_overlap',
+        \      'converter_delimiter',
         \      'converter_abbr',
         \ ],
         \ 'keyword_patterns' : g:neocomplete#keyword_patterns,
-        \ 'min_pattern_length' : g:neocomplete#auto_completion_start_length,
-        \ 'input_pattern' : '',
         \ 'neocomplete__context' : neocomplete#init#_context({}),
         \ }
 
@@ -561,15 +710,16 @@ function! neocomplete#init#_source(source) abort "{{{
           \ empty(source.filetypes) ? 10 : 100
   endif
 
-  if !has_key(source, 'mark')
-    " Set default mark.
-    let source.mark = '[' . source.name . ']'
-  endif
-
   if !has_key(source.keyword_patterns, '_')
     " Set default keyword pattern.
     let source.keyword_patterns['_'] =
           \ get(g:neocomplete#keyword_patterns, '_', '\h\w*')
+  endif
+
+  if !has_key(source, 'min_pattern_length')
+    " Set min_pattern_length.
+    let source.min_pattern_length = (source.kind ==# 'keyword') ?
+          \ g:neocomplete#auto_completion_start_length : 0
   endif
 
   let source.neocomplete__matchers = neocomplete#init#_filters(
@@ -584,7 +734,7 @@ function! neocomplete#init#_source(source) abort "{{{
   return source
 endfunction"}}}
 
-function! neocomplete#init#_filters(names) abort "{{{
+function! neocomplete#init#_filters(names) "{{{
   let _ = []
   let filters = neocomplete#variables#get_filters()
 
@@ -621,7 +771,7 @@ function! neocomplete#init#_filters(names) abort "{{{
   return _
 endfunction"}}}
 
-function! neocomplete#init#_filter(filter) abort "{{{
+function! neocomplete#init#_filter(filter) "{{{
   let default = {
         \ }
 
@@ -635,18 +785,14 @@ function! neocomplete#init#_filter(filter) abort "{{{
   return filter
 endfunction"}}}
 
-function! neocomplete#init#_context(context) abort "{{{
-  let filetype = neocomplete#get_context_filetype()
+function! neocomplete#init#_context(context) "{{{
   return extend(a:context, {
         \ 'input' : '',
         \ 'prev_complete_pos' : -1,
         \ 'prev_candidates' : [],
-        \ 'prev_line' : '',
         \ 'complete_pos' : -1,
         \ 'complete_str' : '',
-        \ 'candidates' : [],
-        \ 'filetype' : filetype,
-        \ 'filetypes' : neocomplete#context_filetype#filetypes(),
+        \ 'candidates' : []
         \ })
 endfunction"}}}
 

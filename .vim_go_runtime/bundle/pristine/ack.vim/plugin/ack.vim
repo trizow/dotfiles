@@ -1,17 +1,17 @@
-if exists('g:loaded_ack') || &cp
+if exists('g:loaded_ack')
   finish
 endif
 
 if !exists("g:ack_default_options")
-  let g:ack_default_options = " -s -H --nopager --nocolor --nogroup --column"
+  let g:ack_default_options = " -s -H --nocolor --nogroup --column"
 endif
 
 " Location of the ack utility
 if !exists("g:ackprg")
-  if executable('ack-grep')
-    let g:ackprg = "ack-grep"
-  elseif executable('ack')
+  if executable('ack')
     let g:ackprg = "ack"
+  elseif executable('ack-grep')
+    let g:ackprg = "ack-grep"
   else
     finish
   endif
@@ -61,10 +61,6 @@ endif
 
 if !exists("g:ack_autofold_results")
   let g:ack_autofold_results = 0
-endif
-
-if !exists("g:ack_use_cword_for_empty_search")
-  let g:ack_use_cword_for_empty_search = 1
 endif
 
 command! -bang -nargs=* -complete=file Ack           call ack#Ack('grep<bang>', <q-args>)

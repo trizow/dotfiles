@@ -38,22 +38,21 @@ let s:source = {
       \ 'kind' : 'manual',
       \ 'mark' : '[O]',
       \ 'rank' : 50,
-      \ 'min_pattern_length' : 0,
       \ 'hooks' : {},
       \}
 
 let s:List = neocomplete#util#get_vital().import('Data.List')
 
-function! s:source.hooks.on_init(context) abort "{{{
+function! s:source.hooks.on_init(context) "{{{
   " Initialize omni completion pattern. "{{{
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#sources#omni#input_patterns',
         \'html,xhtml,xml,markdown,mkd',
-        \'<\|\s[[:alnum:]-]*')
+        \'<[^>]*')
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#sources#omni#input_patterns',
         \'css,scss,sass',
-        \'\w\{' . g:neocomplete#min_keyword_length . '\}\|\w\+[):;]\s*\w*\|[@!]')
+        \'^\s\+\w\+\|\w\+[):;]\?\s\+\w*\|[@!]')
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#sources#omni#input_patterns',
         \'javascript',
@@ -117,26 +116,27 @@ function! s:source.hooks.on_init(context) abort "{{{
   "}}}
 endfunction"}}}
 
-function! s:source.get_complete_position(context) abort "{{{
+function! s:source.get_complete_position(context) "{{{
+  let filetype = neocomplete#get_context_filetype()
   let a:context.source__complete_results =
         \ s:set_complete_results_pos(
-        \   s:get_omni_funcs(a:context.filetype), a:context.input)
+        \   s:get_omni_funcs(filetype), a:context.input)
 
   return s:get_complete_pos(a:context.source__complete_results)
 endfunction"}}}
 
-function! s:source.gather_candidates(context) abort "{{{
+function! s:source.gather_candidates(context) "{{{
   return s:get_candidates(
         \ s:set_complete_results_words(
         \  a:context.source__complete_results),
         \  a:context.complete_pos, a:context.complete_str)
 endfunction"}}}
 
-function! neocomplete#sources#omni#define() abort "{{{
+function! neocomplete#sources#omni#define() "{{{
   return s:source
 endfunction"}}}
 
-function! s:get_omni_funcs(filetype) abort "{{{
+function! s:get_omni_funcs(filetype) "{{{
   let funcs = []
   for ft in insert(split(a:filetype, '\.'), '_')
     let omnifuncs = neocomplete#util#convert2list(
@@ -166,7 +166,7 @@ function! s:get_omni_funcs(filetype) abort "{{{
 
   return s:List.uniq(funcs)
 endfunction"}}}
-function! s:get_omni_list(list) abort "{{{
+function! s:get_omni_list(list) "{{{
   let omni_list = []
 
   " Convert string list.
@@ -181,7 +181,7 @@ function! s:get_omni_list(list) abort "{{{
   return omni_list
 endfunction"}}}
 
-function! s:set_complete_results_pos(funcs, cur_text) abort "{{{
+function! s:set_complete_results_pos(funcs, cur_text) "{{{
   " Try omnifunc completion. "{{{
   let complete_results = {}
   for [omnifunc, pattern] in a:funcs
@@ -225,7 +225,7 @@ function! s:set_complete_results_pos(funcs, cur_text) abort "{{{
 
   return complete_results
 endfunction"}}}
-function! s:set_complete_results_words(complete_results) abort "{{{
+function! s:set_complete_results_words(complete_results) "{{{
   " Try source completion.
   for [omnifunc, result] in items(a:complete_results)
     if neocomplete#complete_check()
@@ -235,9 +235,9 @@ function! s:set_complete_results_words(complete_results) abort "{{{
     let pos = getpos('.')
 
     try
+      call cursor(0, result.complete_pos)
       let ret = call(omnifunc, [0, result.complete_str])
-      let list = type(ret) == type(0) ? [] :
-            \ type(ret) == type([]) ? ret : ret.words
+      let list = type(ret) == type([]) ? ret : ret.words
     catch
       call neocomplete#print_error(
             \ 'Error occurred calling omnifunction: ' . omnifunc)
@@ -255,7 +255,7 @@ function! s:set_complete_results_words(complete_results) abort "{{{
 
   return a:complete_results
 endfunction"}}}
-function! s:get_complete_pos(complete_results) abort "{{{
+function! s:get_complete_pos(complete_results) "{{{
   if empty(a:complete_results)
     return -1
   endif
@@ -269,7 +269,7 @@ function! s:get_complete_pos(complete_results) abort "{{{
 
   return complete_pos
 endfunction"}}}
-function! s:get_candidates(complete_results, complete_pos, complete_str) abort "{{{
+function! s:get_candidates(complete_results, complete_pos, complete_str) "{{{
   " Append prefix.
   let candidates = []
   for result in values(a:complete_results)

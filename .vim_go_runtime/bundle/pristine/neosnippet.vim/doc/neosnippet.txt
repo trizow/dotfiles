@@ -1,9 +1,27 @@
 *neosnippet.txt*
 		The neo-snippet plugin contains snippet source
 
-Version: 5.0
-Author: Shougo <Shougo.Matsu at gmail.com>
-License: MIT license
+Version: 4.2
+Author: Shougo <Shougo.Matsu@gmail.com>
+License: MIT license  {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
 
 CONTENTS			*neosnippet-contents*
 
@@ -23,8 +41,9 @@ INTRODUCTION					*neosnippet-introduction*
 
 *neosnippet* offers functionality similar to snipMate.vim or snippetsEmu.vim.
 This analyzes snippet files which you can use for the completion.  Since you
-can choose snippets with the deoplete interface, you might have less trouble
-using them, because you do not have to remember each snippet name.
+can choose snippets with the neocomplcache/neocomplete interface, you might
+have less trouble using them, because you do not have to remember each snippet
+name.
 
 ==============================================================================
 INSTALL						*neosnippet-install*
@@ -32,8 +51,9 @@ INSTALL						*neosnippet-install*
 1: Extract the file and put files in your Vim directory
    (usually ~/.vim/ or Program Files/Vim/vimfiles on Windows).
 
-Note: If you want to complete snippets, you must install deoplete
-(https://github.com/Shougo/deoplete.nvim). It's not required, but highly
+Note: If you want to complete snippets, you must install either neocomplcache
+(https://github.com/Shougo/neocomplcache.vim) or neocomplete
+(https://github.com/Shougo/neocomplete.vim). It's not required, but highly
 recommended.
 
 Default snippets files are available in neosnippet-snippets.
@@ -54,6 +74,7 @@ current 'filetype' of the file, but also depends on the cursor location, such
 as javascript inside html, or lua inside Vim scripts.
 https://github.com/Shougo/context_filetype.vim
 
+==============================================================================
 INTERFACE					*neosnippet-interface*
 
 ------------------------------------------------------------------------------
@@ -67,9 +88,9 @@ COMMANDS 					*neosnippet-commands*
 
 					*:NeoSnippetEdit*
 :NeoSnippetEdit [{options}] [filetype]
-		Opens the snippets for a given [filetype] to edit. It
-		automatically selects the current buffer's filetype unless you
-		specify another one by [filetype].
+		Opens the snippets for a given [filetype] to edit. It automatically
+		selects the current buffer's filetype unless you specify
+		another one by [filetype].
 
 		If the path to [filetype] snippets is a directory, it
 		automatically selects "[filetype].snip" in the [filetype]
@@ -82,9 +103,6 @@ COMMANDS 					*neosnippet-commands*
 		The following parameters can be used as {options} to modify
 		the behavior of the command. Note: You must escape spaces with
 		a backslash "\".
-
-		Note: You must set |g:neosnippet#snippets_directory| before
-		using it.
 
 					*neosnippet-edit-options-vertical*
 		-vertical
@@ -112,7 +130,7 @@ COMMANDS 					*neosnippet-commands*
 
 							*:NeoSnippetSource*
 :NeoSnippetSource [filename]
-		Load the snippets contained in [filename].
+		Load the snippets of a [filetype].
 		Note: The loaded snippets are enabled in current buffer only.
 
 						*:NeoSnippetClearMarkers*
@@ -137,12 +155,9 @@ g:neosnippet#snippets_directory		*g:neosnippet#snippets_directory*
 		several files if available. For example if you edit a "Vim"
 		file it loads the snippets from:
 
-		- "vim.snip"
-		- "vim.snippets"
-		- "vim_*.snip"
-		- "vim_*.snippets"
+		- "vim.snip*"
+		- "vim_*.snip*"
 		- "vim/**/*.snip"
-		- "vim/**/*.snippets"
 
 		The default value is ''.
 
@@ -183,13 +198,9 @@ g:neosnippet#disable_runtime_snippets
 				*g:neosnippet#enable_snipmate_compatibility*
 g:neosnippet#enable_snipmate_compatibility
 		If this variable is not 0, neosnippet will enable the snipMate
-		compatibility features:
-
-		1. Define Filename() function.
-		2. Load |g:snippets_dir| and snipMate snippets files from
+		compatibility feature (For example: Filename() function) and
+		load |g:snippets_dir| and snipMate snippets automatically from
 		'runtimepath'.
-		3. Enable file snippets feature in snipMate.
-		4. snipMate optional abbr syntax.
 
 		The default value is 0.
 
@@ -205,46 +216,6 @@ g:neosnippet#expand_word_boundary
 g:neosnippet#enable_conceal_markers
 		If this variable is not 0, neosnippet will use the |conceal|
 		markers.
-
-		The default value is 1.
-
-					*g:neosnippet#enable_completed_snippet*
-g:neosnippet#enable_completed_snippet
-		If this variable is not 0, neosnippet can expand the function
-		prototype.
-
-		The default value is 0.
-		
-					*g:neosnippet#enable_complete_done*
-g:neosnippet#enable_complete_done
-		If this variable is not 0, neosnippet can expand on
-		|CompleteDone|.
-		Note: If the feature is enabled, you cannot expand snippet
-		trigger manually when |pumvisible()|to prevent conflicts with
-		|CompleteDone| expand.
-
-		The default value is 0.
-		
-					*g:neosnippet#enable_optional_arguments*
-g:neosnippet#enable_optional_arguments
-		If this variable is not 0, neosnippet will conceal commas in
-		expanded arguments from completed snippets.
-		
-		Useful for languages where arguments are optional by default.
-
-		Note: For use with |g:neosnippet#enable_completed_snippet| = 1
-
-		The default value is 1.
-
-					*g:neosnippet#enable_auto_clear_markers*
-g:neosnippet#enable_auto_clear_markers
-		If this variable is not 0, neosnippet will clear the markers
-		in the buffer when |BufWritePost|, |CursorMoved| and
-		|CursorMovedI| autocmd.
-
-		Note: The feature does not work for multi lines snippets.
-		If you want to clear them, you should use
-		|:NeoSnippetClearMarkers| instead.
 
 		The default value is 1.
 
@@ -267,46 +238,35 @@ g:neosnippet#data_directory			*g:neosnippet#data_directory*
 		Default value is "$XDG_CACHE_HOME/neosnippet" or
 		expand("~/.cache/neosnippet"); the absolute path of it.
 
-g:neosnippet#conceal_char			*g:neosnippet#conceal_char*
-		This variable can customize how the jump position is concealed
-		after snippet expansion.
-
-		The default value is '|'.
-
-				*b:neosnippet_disable_snippet_triggers*
-b:neosnippet_disable_snippet_triggers
-		Specifies the triggers which disables in the buffer.
-		It is useful to disable some snippet triggers.
-
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*neosnippet-key-mappings*
 
-					*i_<Plug>(neosnippet_expand_or_jump)*
-i_<Plug>(neosnippet_expand_or_jump)
+					*<Plug>(neosnippet_expand_or_jump)*
+<Plug>(neosnippet_expand_or_jump)
 					*s_<Plug>(neosnippet_expand_or_jump)*
 s_<Plug>(neosnippet_expand_or_jump)
 		Expand a snippet in the current cursor position. If there is
 		no snippet available it jumps to the next placeholder of the
 		buffer.
 
-				*i_<Plug>(neosnippet_jump_or_expand)*
-i_<Plug>(neosnippet_jump_or_expand)
+				*<Plug>(neosnippet_jump_or_expand)*
+<Plug>(neosnippet_jump_or_expand)
 				*s_<Plug>(neosnippet_jump_or_expand)*
 s_<Plug>(neosnippet_jump_or_expand)
 		Jump to the next available placeholder in the buffer. If there
 		is no placeholder it expands a snippet in the current cursor
 		position.
 
-						*i_<Plug>(neosnippet_expand)*
-i_<Plug>(neosnippet_expand)
+						*<Plug>(neosnippet_expand)*
+<Plug>(neosnippet_expand)
 						*s_<Plug>(neosnippet_expand)*
 s_<Plug>(neosnippet_expand)
 		Expand a snippet in current cursor position. It only takes
 		effect if there is a snippet text to expand or if you have
 		chosen a snippet from popup menu.
 
-						*i_<Plug>(neosnippet_jump)*
-i_<Plug>(neosnippet_jump)
+						*<Plug>(neosnippet_jump)*
+<Plug>(neosnippet_jump)
 						*s_<Plug>(neosnippet_jump)*
 s_<Plug>(neosnippet_jump)
 		Jump to the next placeholder key. It does not expand any
@@ -351,32 +311,6 @@ neosnippet#expandable_or_jumpable()
 		\ neosnippet#expandable_or_jumpable() ?
 		\ "\<Plug>(neosnippet_expand_or_jump)" : "\<C-n>"
 <
-						*neosnippet#anonymous()*
-neosnippet#anonymous({snippet})
-		It defines anonymous snippet.
-		{snippet} is snippet definition.
-		{options} is snippet option.
-		You can expand snippet definition without defining snippet
-		trigger.
-		Note: You can use this function with |map-<expr>|.
->
-		inoremap <silent> ((
-		\ <C-r>=neosnippet#anonymous('\left(${1}\right)${0}')<CR>
-		" OR
-		inoremap <expr><silent> ((
-		\ neosnippet#anonymous('\left(${1}\right)${0}')
-<
-						*neosnippet#expand()*
-neosnippet#expand({trigger})
-		It expands the snippet trigger.
-		{trigger} is snippet trigger.
-		Note: You can use this function with |map-<expr>|.
->
-		inoremap <silent> test
-		\ i<C-r>=neosnippet#expand('date_english')<CR>
-		nnoremap <silent><expr> test
-		\ neosnippet#expand('date_english')
-
 ------------------------------------------------------------------------------
 FUNCTIONS					*neosnippet-functions*
 
@@ -386,28 +320,22 @@ neosnippet#get_snippets_directory()
 		snippets directories and |g:neosnippet#snippets_directory|
 		directories.
 
-						*neosnippet#complete_done()*
-neosnippet#complete_done()
-		It expands the snippet for |CompleteDone| event.
-		Note: The function is deprecated.
 
 ==============================================================================
 EXAMPLES					*neosnippet-examples*
 >
 	" Plugin key-mappings.
-	" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
 	imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 	smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 	xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 	" SuperTab like snippets' behavior.
-	" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-	"imap <expr><TAB>
-	" \ pumvisible() ? "\<C-n>" :
-	" \ neosnippet#expandable_or_jumpable() ?
-	" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+	"imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+	" \ "\<Plug>(neosnippet_expand_or_jump)"
+	" \: pumvisible() ? "\<C-n>" : "\<TAB>"
 	"smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-	" \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+	" \ "\<Plug>(neosnippet_expand_or_jump)"
+	" \: "\<TAB>"
 
 	" For conceal markers.
 	if has('conceal')
@@ -417,18 +345,11 @@ EXAMPLES					*neosnippet-examples*
 	" Enable snipMate compatibility feature.
 	" let g:neosnippet#enable_snipmate_compatibility = 1
 
-	" Expand the completed snippet trigger by <CR>.
-	"imap <expr><CR>
-	"\ (pumvisible() && neosnippet#expandable()) ?
-	"\ "\<Plug>(neosnippet_expand)" : "\<CR>"
-
 ==============================================================================
 SNIPPET SYNTAX					*neosnippet-snippet-syntax*
 
 It is quite easy to create your own snippets. You can use the example below to
 get started.
-
-Note: The snippets file extension must be ".snip" or ".snippets".
 
 Example:
 
@@ -599,17 +520,14 @@ The structure of a placeholder can be:
 <
 
 - $number
-- ${0}, $0
+- ${0}
 
 	This is a synchronized placeholder. Sometimes it is required to repeat
 	a value in several positions inside a snippet. If you set the number
 	of this placeholder to the same number as one of the other
 	placeholders in the snippet, it will repeat its content. $1 is
-	synchronized to ${1} and so on. ${0} or $0 will be the final jump
+	synchronized to ${1} and so on. ${0} will be the final jump
 	placeholder.
-
-	Note: If you don't use ${0} in snippet, ${0} will be added
-	automatically.
 
 	Example
 
@@ -655,21 +573,16 @@ inserted by expanding the output of the strftime command.
 
 >
 	snippet     header
-	    File: ${1:`expand('%:t')`}
-	    ${2:Created at: `strftime("%B %d, %Y")`}
+	   File: ${1:`expand('%:t')`}
+	   ${2:Created at: `strftime("%B %d, %Y")`}
 <
 
 You can also nest placeholders if you escape the special characters.
 
 >
 	snippet div
-	    <div ${1:id="${2:someid\}"}>${3}</div>${4}
+	   <div ${1:id="${2:someid\}"}>${3}</div>${4}
 <
-If you need to use literal "$" in default, you must escape the special
-characters.
->
-	snippet  test
-	    ${1:escape \\${2:foobar\} value}
 
 In some cases you need to escape the curly brace "}" twice as shown in the
 example below.
@@ -698,18 +611,7 @@ Or if you want to include a whole directory with file type snippets.
 >
 	include javascript/*
 <
-Neosnippet also supports "extends" syntax like snipMate.
 
->
-	extends c
-<
-It behaves like this:
-
->
-	include c.snip
-	include c.snippets
-	include c/*
-<
 If you include snippet files it can happen that the same snippet name is used
 multiple times in snippet files. Neosnippet produces a warning if it detects
 this. If you want to overwrite a snippet explicitly, please use:
@@ -767,12 +669,7 @@ insert empty line in snippet end, you must insert placeholder.
 	  #!/usr/bin/env ruby
 
 
-You can load a Vim script file for snippets.
-
->
-	source go.vim
 <
-
 ==============================================================================
 UNITE SOURCES					*neosnippet-unite-sources*
 
@@ -811,7 +708,7 @@ Q: What if I want to expand a snippet trigger after (, [, " etc...:
 
 A: You should use "options word" in the snippet definition. This changes the
 expansion behavior to a word boundary or set
-|g:neosnippet#expand_word_boundary|.
+|g:neosnippet#enable_word_expand|.
 >
 	snippet     date
 	options     word
@@ -865,9 +762,7 @@ A: You can use |:NeoSnippetSource| for it.
 Q: I want to delete markers when InsertLeave event.
 
 A: You can use |:NeoSnippetClearMarkers| command. >
-
 	autocmd InsertLeave * NeoSnippetClearMarkers
-	snoremap <silent><ESC>  <ESC>:NeoSnippetClearMarkers<CR>
 
 Q: Why did you separate default snippets from neosnippet core?
 
@@ -884,12 +779,6 @@ and expand the candidate as trigger.
 Note: It works in "func(arg1, arg2, ...)" prototypes only.
 Note: It is experiental feature.
 Note: |v:completed_item| feature is needed.
-
-Q: I want to auto complete with parameters.
-
-A: >
-	let g:neosnippet#enable_completed_snippet = 1
-	let g:neosnippet#enable_complete_done = 1
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:

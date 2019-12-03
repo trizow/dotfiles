@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neocomplete#filters#converter_remove_overlap#define() abort "{{{
+function! neocomplete#filters#converter_remove_overlap#define() "{{{
   return s:converter
 endfunction"}}}
 
@@ -35,12 +35,15 @@ let s:converter = {
       \ 'description' : 'remove overlapped characters',
       \}
 
-function! s:converter.filter(context) abort "{{{
+function! s:converter.filter(context) "{{{
   let next = matchstr(getline('.')[
         \ len(neocomplete#helper#get_cur_text()) :], '^\S\+')
   if next == ''
     return a:context.candidates
   endif
+
+  let neocomplete = neocomplete#get_current_neocomplete()
+  let neocomplete.overlapped_items = {}
 
   let candidates = []
   for candidate in a:context.candidates
@@ -52,7 +55,11 @@ function! s:converter.filter(context) abort "{{{
         let candidate.abbr = candidate.word
       endif
 
+      let word = candidate.word
       let candidate.word = candidate.word[: -overlapped_len-1]
+      if candidate.word != ''
+        let neocomplete.overlapped_items[candidate.word] = word
+      endif
       call add(candidates, candidate)
     elseif !neocomplete#is_auto_complete()
       call add(candidates, candidate)
@@ -69,7 +76,7 @@ function! s:converter.filter(context) abort "{{{
   return candidates
 endfunction"}}}
 
-function! neocomplete#filters#converter_remove_overlap#length(left, right) abort "{{{
+function! neocomplete#filters#converter_remove_overlap#length(left, right) "{{{
   if a:left == '' || a:right == ''
     return 0
   endif

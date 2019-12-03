@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neocomplete#filters#converter_remove_last_paren#define() abort "{{{
+function! neocomplete#filters#converter_remove_last_paren#define() "{{{
   return s:converter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:converter = {
       \ 'description' : 'remove last parenthesis',
       \}
 
-function! s:converter.filter(context) abort "{{{
+function! s:converter.filter(context) "{{{
   for candidate in a:context.candidates
     let candidate.word =
           \ substitute(candidate.word, '[\[<({]$', '', '')

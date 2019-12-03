@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neocomplete#custom#get() abort "{{{
+function! neocomplete#custom#get() "{{{
   if !exists('s:custom')
     let s:custom = {}
     let s:custom.sources = {}
@@ -36,7 +36,7 @@ function! neocomplete#custom#get() abort "{{{
   return s:custom
 endfunction"}}}
 
-function! neocomplete#custom#source(source_name, option_name, value) abort "{{{
+function! neocomplete#custom#source(source_name, option_name, value) "{{{
   let custom_sources = neocomplete#custom#get().sources
 
   for key in split(a:source_name, '\s*,\s*')

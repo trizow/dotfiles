@@ -1,6 +1,6 @@
 "============================================================================
 "File:        lint.vim
-"Description: Syntax checking plugin for syntastic
+"Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  LCD 47 <lcd047 at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -43,13 +43,12 @@ function! SyntaxCheckers_r_lint_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_r_lint_GetLocList() dict
-    let buf = bufnr('')
-
     let setwd = syntastic#util#isRunningWindows() ? 'setwd("' . escape(getcwd(), '"\') . '"); ' : ''
+    let setwd = 'setwd("' . escape(getcwd(), '"\') . '"); '
     let makeprg = self.getExecEscaped() . ' --slave --restore --no-save' .
         \ ' -e ' . syntastic#util#shescape(setwd . 'library(lint); ' .
         \       'try(lint(commandArgs(TRUE), ' . g:syntastic_r_lint_styles . '))') .
-        \ ' --args ' . syntastic#util#shescape(bufname(buf))
+        \ ' --args ' . syntastic#util#shexpand('%')
 
     let errorformat =
         \ '%t:%f:%l:%v: %m,' .

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neocomplete#filters#matcher_length#define() abort "{{{
+function! neocomplete#filters#matcher_length#define() "{{{
   return s:matcher
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:matcher = {
       \ 'description' : 'input length matcher',
       \}
 
-function! s:matcher.filter(context) abort "{{{
+function! s:matcher.filter(context) "{{{
   if empty(a:context.candidates)
     return []
   endif

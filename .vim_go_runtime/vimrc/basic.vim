@@ -146,7 +146,7 @@ set nrformats=octal,hex,alpha
 syntax enable
 
 try
-    colorscheme desert
+"    colorscheme desert
 catch
 endtry
 

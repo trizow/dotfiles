@@ -1,6 +1,6 @@
 "============================================================================
 "File:        verilator.vim
-"Description: Syntax checking plugin for syntastic
+"Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Kocha <kocha dot lsifrontend at gmail dot com>
 "============================================================================
 

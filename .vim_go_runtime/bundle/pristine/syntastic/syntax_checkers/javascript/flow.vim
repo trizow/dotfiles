@@ -25,18 +25,17 @@ function! SyntaxCheckers_javascript_flow_IsAvailable() dict
     if !executable(self.getExec())
         return 0
     endif
-    return syntastic#util#versionIsAtLeast(self.getVersion(self.getExecEscaped() . ' version'), [0, 34])
+    return syntastic#util#versionIsAtLeast(self.getVersion(), [0, 6])
 endfunction
 
 function! SyntaxCheckers_javascript_flow_GetLocList() dict
-    let buf = bufnr('')
-    if syntastic#util#findFileInParent('.flowconfig', fnamemodify(bufname(buf), ':p:h')) ==# ''
+    if syntastic#util#findFileInParent('.flowconfig', expand('%:p:h', 1)) ==# ''
         return []
     endif
 
     let makeprg = self.makeprgBuild({
         \ 'exe': self.getExecEscaped() . ' status',
-        \ 'args_after': '--quiet --show-all-errors --json' })
+        \ 'args_after': '--show-all-errors --json' })
 
     let errorformat =
         \ '%f:%l:%c:%n: %m,' .

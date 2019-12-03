@@ -1,6 +1,6 @@
 "============================================================================
 "File:        cobc.vim
-"Description: Syntax checking plugin for syntastic
+"Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  LCD 47 <lcd047 at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -33,7 +33,7 @@ endfunction
 
 function! SyntaxCheckers_cobol_cobc_GetLocList() dict
     return syntastic#c#GetLocList('cobol', 'cobc', {
-        \ 'errorformat': '%f:%\s%#%l: %trror: %m',
+        \ 'errorformat': '%f:%l: %trror: %m',
         \ 'main_flags': '-fsyntax-only' })
 endfunction
 

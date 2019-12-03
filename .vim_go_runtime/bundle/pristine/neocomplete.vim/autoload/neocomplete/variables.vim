@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neocomplete#variables#get_frequencies() abort "{{{
+function! neocomplete#variables#get_frequencies() "{{{
   if !exists('s:filetype_frequencies')
     let s:filetype_frequencies = {}
   endif
@@ -40,21 +40,21 @@ function! neocomplete#variables#get_frequencies() abort "{{{
   return frequencies
 endfunction"}}}
 
-function! neocomplete#variables#get_sources() abort "{{{
+function! neocomplete#variables#get_sources() "{{{
   if !exists('s:sources')
     let s:sources = {}
   endif
   return s:sources
 endfunction"}}}
 
-function! neocomplete#variables#get_source(name) abort "{{{
+function! neocomplete#variables#get_source(name) "{{{
   if !exists('s:sources')
     let s:sources = {}
   endif
   return get(s:sources, a:name, {})
 endfunction"}}}
 
-function! neocomplete#variables#get_filters() abort "{{{
+function! neocomplete#variables#get_filters() "{{{
   if !exists('s:filters')
     let s:filters = {}
   endif

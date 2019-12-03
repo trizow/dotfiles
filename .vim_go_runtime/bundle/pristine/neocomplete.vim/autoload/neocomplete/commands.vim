@@ -26,12 +26,12 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neocomplete#commands#_initialize() abort "{{{
+function! neocomplete#commands#_initialize() "{{{
   command! -nargs=1 NeoCompleteAutoCompletionLength
         \ call s:set_auto_completion_length(<args>)
 endfunction"}}}
 
-function! neocomplete#commands#_toggle_lock() abort "{{{
+function! neocomplete#commands#_toggle_lock() "{{{
   if !neocomplete#is_enabled()
     call neocomplete#init#enable()
     return
@@ -46,40 +46,36 @@ function! neocomplete#commands#_toggle_lock() abort "{{{
   endif
 endfunction"}}}
 
-function! neocomplete#commands#_lock() abort "{{{
+function! neocomplete#commands#_lock() "{{{
   let neocomplete = neocomplete#get_current_neocomplete()
   let neocomplete.lock = 1
 endfunction"}}}
 
-function! neocomplete#commands#_unlock() abort "{{{
+function! neocomplete#commands#_unlock() "{{{
   let neocomplete = neocomplete#get_current_neocomplete()
   let neocomplete.lock = 0
 endfunction"}}}
 
-function! neocomplete#commands#_clean() abort "{{{
+function! neocomplete#commands#_clean() "{{{
   " Delete cache files.
   let data_directory = neocomplete#get_data_directory()
   for directory in filter(neocomplete#util#glob(
         \ data_directory.'/*'), 'isdirectory(v:val)')
-    if has('patch-7.4.1120')
-      call delete(data_directory, 'rf')
-    else
-      for filename in filter(neocomplete#util#glob(directory.'/*'),
-            \ '!isdirectory(v:val)')
-        call delete(filename)
-      endfor
-    endif
+    for filename in filter(neocomplete#util#glob(directory.'/*'),
+          \ '!isdirectory(v:val)')
+      call delete(filename)
+    endfor
   endfor
 
   echo 'Cleaned cache files in: ' . data_directory
 endfunction"}}}
 
-function! neocomplete#commands#_set_file_type(filetype) abort "{{{
+function! neocomplete#commands#_set_file_type(filetype) "{{{
   let neocomplete = neocomplete#get_current_neocomplete()
   let neocomplete.context_filetype = a:filetype
 endfunction"}}}
 
-function! s:rand(max) abort "{{{
+function! s:rand(max) "{{{
   if !has('reltime')
     " Same value.
     return 0
@@ -89,7 +85,7 @@ function! s:rand(max) abort "{{{
   return (time < 0 ? -time : time)% (a:max + 1)
 endfunction"}}}
 
-function! s:set_auto_completion_length(len) abort "{{{
+function! s:set_auto_completion_length(len) "{{{
   let neocomplete = neocomplete#get_current_neocomplete()
   let neocomplete.completion_length = a:len
 endfunction"}}}

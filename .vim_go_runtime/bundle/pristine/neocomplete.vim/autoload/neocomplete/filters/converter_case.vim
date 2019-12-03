@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neocomplete#filters#converter_case#define() abort "{{{
+function! neocomplete#filters#converter_case#define() "{{{
   return s:converter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:converter = {
       \ 'description' : 'case converter',
       \}
 
-function! s:converter.filter(context) abort "{{{
+function! s:converter.filter(context) "{{{
   if !neocomplete#is_text_mode() && !neocomplete#within_comment()
     return a:context.candidates
   endif
@@ -68,7 +68,7 @@ function! s:converter.filter(context) abort "{{{
   return a:context.candidates
 endfunction"}}}
 
-function! s:get_convert_candidates(candidates) abort
+function! s:get_convert_candidates(candidates)
   return filter(copy(a:candidates),
         \ "get(v:val, 'neocomplete__convertable', 1)
         \  && v:val.word =~ '^[a-zA-Z0-9_''-]\\+$'")

@@ -109,10 +109,10 @@ PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
 export EDITOR="vim"
 
 # Go binary paths
-export GOPATH="$HOME/go"
+export GOPATH="$HOME/.go"
 export GOROOT="$HOME/go"
 export GOBIN="$GOROOT/bin"
-export PATH="$GOBIN:$GOPATH/bin:$PATH"
+export PATH="$GOBIN:$GOPATH/bin:$PATH:/snap/bin"
 
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -122,7 +122,7 @@ if [ -f $HOME'/google-cloud-sdk/path.zsh.inc' ]; then . $HOME'/google-cloud-sdk/
 if [ -f $HOME'/google-cloud-sdk/completion.zsh.inc' ]; then . $HOME'/google-cloud-sdk/completion.zsh.inc'; fi
 
 # Flutter
-export PATH="$PATH:$HOME/apps/flutter/bin"
+export PATH="$PATH:$HOME/flutter/bin"
 
 # VTE and Tilix
 if [ $TILIX_ID  ] || [ $VTE_VERSION  ]; then
@@ -143,10 +143,17 @@ export PATH="$PATH:\
 /usr/bin:\
 /usr/games:\
 /sbin:/bin:\
-/home/troy.bebee/android-studio/bin:\
-/home/troy.bebee/apps/flutter/bin:\
+/opt/android-studio/bin:\
+/home/troy.bebee/flutter/bin:\
+/home/troy.bebee/tools/bin:\
 /home/troy.bebee/.pulumi/bin:\
 /home/troy.bebee/.local/bin"
 
 # add Pulumi to the PATH
 export PATH=$PATH:$HOME/.pulumi/bin
+
+# Android Development
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools/bin:$PATH"
+# adb connect
+#adb connect 100.115.92.2:5555

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:main(argv) abort "{{{
+function! s:main(argv) "{{{
   " args: funcname, outputname filename pattern_file_name mark minlen fileencoding
   let [funcname, outputname, filename, pattern_file_name, mark, minlen, fileencoding]
         \ = a:argv
@@ -51,7 +51,7 @@ function! s:main(argv) abort "{{{
   call writefile([string], outputname)
 endfunction"}}}
 
-function! s:load_from_file(filename, pattern_file_name, mark, minlen, fileencoding, is_string) abort "{{{
+function! s:load_from_file(filename, pattern_file_name, mark, minlen, fileencoding, is_string) "{{{
   if !filereadable(a:filename)
     " File not found.
     return []
@@ -95,7 +95,7 @@ function! s:load_from_file(filename, pattern_file_name, mark, minlen, fileencodi
   return keyword_list
 endfunction"}}}
 
-function! s:load_from_tags(filename, pattern_file_name, mark, minlen, fileencoding) abort "{{{
+function! s:load_from_tags(filename, pattern_file_name, mark, minlen, fileencoding) "{{{
   let keyword_lists = []
   let dup_check = {}
 
@@ -187,7 +187,7 @@ function! s:load_from_tags(filename, pattern_file_name, mark, minlen, fileencodi
     let abbr = substitute(abbr, '"\s*{{{', '', '')
 
     let keyword = {
-          \ 'word' : tag[0], 'abbr' : abbr, 'menu' : '',
+          \ 'word' : tag[0], 'abbr' : abbr, 'menu' : a:mark,
           \ 'kind' : option['kind'],
           \ }
     if has_key(option, 'struct')
@@ -211,7 +211,7 @@ function! s:load_from_tags(filename, pattern_file_name, mark, minlen, fileencodi
   return keyword_lists
 endfunction"}}}
 
-function! s:truncate(str, width) abort "{{{
+function! s:truncate(str, width) "{{{
   " Original function is from mattn.
   " http://github.com/mattn/googlereader-vim/tree/master
 
@@ -234,7 +234,7 @@ function! s:truncate(str, width) abort "{{{
   return ret
 endfunction"}}}
 
-function! s:strwidthpart(str, width) abort "{{{
+function! s:strwidthpart(str, width) "{{{
   let ret = a:str
   let width = strdisplaywidth(a:str)
   while width > a:width
@@ -246,7 +246,7 @@ function! s:strwidthpart(str, width) abort "{{{
   return ret
 endfunction"}}}
 
-function! s:iconv(expr, from, to) abort
+function! s:iconv(expr, from, to)
   if a:from == '' || a:to == '' || a:from ==? a:to
     return a:expr
   endif
@@ -265,7 +265,7 @@ if argc() == 7 &&
 
   qall!
 else
-  function! neocomplete#async_cache#main(argv) abort "{{{
+  function! neocomplete#async_cache#main(argv) "{{{
     call s:main(a:argv)
   endfunction"}}}
 endif

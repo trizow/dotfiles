@@ -67,8 +67,7 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 " Powershell
 Plug 'pprovost/vim-ps1'
-" Lexical
-Plug 'reedes/vim-lexical'
+" Spell Check
 Plug 'kamykn/spelunker.vim'
 " Markdown support
 " Plug 'mikewest/vim-markdown'
@@ -112,11 +111,11 @@ call plug#end()
 "------------------------------------------------------------------------------
 " Custom color scheme
 "------------------------------------------------------------------------------
-try
+"try
 "    colorscheme foursee
 "    colorscheme desert 
-catch
-endtry
+"catch
+"endtry
 
 colorscheme gruvbox
 
@@ -198,22 +197,14 @@ let g:terraform_completion_keys = 1
 let g:terraform_registry_module_completion = 0
 
 "------------------------------------------------------------------------------
-" Lexical 
-"------------------------------------------------------------------------------
-augroup lexical
-	autocmd!
-	autocmd FileType markdown,mkd call lexical#init()
-	autocmd FileType textile call lexical#init()
-	autocmd FileType text call lexical#init({ 'spell': 0 })
-let g:lexical#spell_key = 'ß'
-
-"------------------------------------------------------------------------------
 " Spelunker 
 "------------------------------------------------------------------------------
+set nospell
+
 " Enable spelunker.vim. (default: 1)
 " 1: enable
 " 0: disable
-let g:enable_spelunker_vim = 0
+let g:enable_spelunker_vim = 1
 
 " Enable spelunker.vim on readonly files or buffer. (default: 0)
 " 1: enable
@@ -266,6 +257,7 @@ let g:spelunker_complex_or_compound_word_group = 'SpelunkerComplexOrCompoundWord
 " Override highlight setting.
 highlight SpelunkerSpellBad cterm=underline ctermfg=247 gui=underline guifg=#9e9e9e
 highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
+
 
 "------------------------------------------------------------------------------
 " Terraform 

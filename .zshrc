@@ -110,6 +110,7 @@ export EDITOR="vim"
 
 # Go binary paths
 export GOPATH="$HOME/.go"
+export GOOS="linux"
 export GOROOT="$HOME/go"
 export GOBIN="$GOROOT/bin"
 export PATH="$GOBIN:$GOPATH/bin:$PATH:/snap/bin"
@@ -157,3 +158,5 @@ export ANDROID_HOME="$HOME/Android/Sdk"
 export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools/bin:$PATH"
 # adb connect
 #adb connect 100.115.92.2:5555
+
+export GOPATH="$HOME/.go"; export GOROOT="$HOME/go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g

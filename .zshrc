@@ -160,3 +160,10 @@ export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools/bin:$PATH"
 #adb connect 100.115.92.2:5555
 
 export GOPATH="$HOME/.go"; export GOROOT="$HOME/go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+
+# The next line enables shell command completion for kix.
+if [ $+commands[kix] ]; then
+  kix completion zsh > /home/troy.bebee/.oh-my-zsh/completions/_kix
+  compinit
+fi
+

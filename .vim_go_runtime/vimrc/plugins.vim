@@ -1,12 +1,5 @@
-" Load pathogen paths
-call pathogen#infect('~/.vim_go_runtime/bundle/forked/{}')
-call pathogen#infect('~/.vim_go_runtime/bundle/pristine/{}')
-call pathogen#helptags()
-
 " -------------- Plugged Plugins --------------------------------------------
 call plug#begin('~/.vim/plugged')
-
-
 " ack
 Plug 'mileszs/ack.vim'
 " auto-pairs
@@ -21,11 +14,6 @@ Plug 'godlygeek/csapprox'
 Plug 'kien/ctrlp.vim'
 " gitv
 Plug 'gregsexton/gitv'
-" NeoComplete
-Plug 'shougo/neocomplete.vim'
-" neosnippet
-Plug 'shougo/neosnippet.vim'
-Plug 'shougo/neosnippet-snippets'
 " nerdcommenter
 " tagbar
 Plug 'majutsushi/tagbar'
@@ -40,8 +28,6 @@ Plug 'Chiel92/vim-autoformat'
 Plug 'tpope/vim-surround'
 " JS Beautify
 Plug 'maksimr/vim-jsbeautify'
-" Kotlin support
-Plug 'udalov/kotlin-vim'
 " Solarized
 Plug 'altercation/vim-colors-solarized'
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
@@ -60,22 +46,19 @@ Plug 'https://github.com/junegunn/vim-github-dashboard.git'
 Plug 'scrooloose/nerdtree'
 Plug 'xuyuanp/nerdtree-git-plugin'
 Plug 'ddollar/nerdcommenter'
-" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
+" GoLang Support
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
-" Powershell
-Plug 'pprovost/vim-ps1'
 " Spell Check
 Plug 'kamykn/spelunker.vim'
+Plug 'kamykn/popup-menu.nvim'
 " Markdown support
-" Plug 'mikewest/vim-markdown'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 " Python support
 Plug 'python-mode/python-mode', { 'branch': 'develop'  }
-Plug 'tmhedberg/simpylfold'
 " JSON support
 Plug 'elzr/vim-json'
 " Typescript
@@ -86,27 +69,13 @@ Plug 'vim-scripts/c.vim'
 Plug 'majutsushi/tagbar'
 " Polyglot dev
 Plug 'sheerun/vim-polyglot'
-" CoC
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Theme
 Plug 'morhetz/gruvbox'
-
-
-
-" Deocomplete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 0
+" CoC
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 " Initialize plugin system
 call plug#end()
-
-
 
 "------------------------------------------------------------------------------
 " Custom color scheme
@@ -183,6 +152,8 @@ let g:syntastic_yaml_checkers = ['yamllint']
 " Go Support
 let g:go_list_type = "quickfix"
 let g:syntastic_go_checkers = ['govet', 'errcheck', 'golangci_lint']
+"let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
+"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 " (Optional)Remove Info(Preview) window
 set completeopt-=preview
@@ -258,99 +229,17 @@ let g:spelunker_complex_or_compound_word_group = 'SpelunkerComplexOrCompoundWord
 highlight SpelunkerSpellBad cterm=underline ctermfg=247 gui=underline guifg=#9e9e9e
 highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
 
-
 "------------------------------------------------------------------------------
-" Terraform 
+" CoC 
 "------------------------------------------------------------------------------
-let g:terraform_align=1
-let g:terraform_remap_spacebar=1
-let g:terraform_fold_sections=1
-let g:terraform_commentstring='//%s'
-let g:terraform_fmt_on_save=1
-
-
-"------------------------------------------------------------------------------
-" NeoComplete
-"------------------------------------------------------------------------------
-
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 1
-
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 0
-
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 0
-
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-" Close popup by <Space>.
-" inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-"inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplete#close_popup()
-inoremap <expr><C-e>  neocomplete#cancel_popup()
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" AutoComplPop like behavior.
-let g:neocomplete#enable_auto_select = 1
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-" Enable heavy omni completion.
-"if !exists('g:neocomplete#sources#omni#input_patterns')
-"  let g:neocomplete#sources#omni#input_patterns = {}
-"endif
-"let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
-endif
-let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
-
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-"
-"------------------------------------------------------------------------------
-" Conquer of Completion 
-"------------------------------------------------------------------------------" if hidden is not set, TextEdit might fail.
+" if hidden is not set, TextEdit might fail.
 set hidden
-
-" Some servers have issues with backup files, see #649
-set nobackup
-set nowritebackup
-
 " Better display for messages
 set cmdheight=2
-
-" You will have bad experience for diagnostic messages when it's default 4000.
+" Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
-
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
-
 " always show signcolumns
 set signcolumn=yes
 
@@ -370,15 +259,9 @@ endfunction
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" Use `[c` and `]c` to navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -386,67 +269,15 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" Use U to show documentation in preview window
+nnoremap <silent> U :call <SID>show_documentation()<CR>
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 
 " Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
+vmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
-
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Create mappings for function text object, requires document symbols feature of languageserver.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-
-" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <C-d> <Plug>(coc-range-select)
-xmap <silent> <C-d> <Plug>(coc-range-select)
-
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Using CocList
 " Show all diagnostics
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions
@@ -464,6 +295,15 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
+"------------------------------------------------------------------------------
+" Terraform 
+"------------------------------------------------------------------------------
+let g:terraform_align=1
+let g:terraform_remap_spacebar=1
+let g:terraform_fold_sections=1
+let g:terraform_commentstring='//%s'
+let g:terraform_fmt_on_save=1
+
 
 "------------------------------------------------------------------------------
 " Rego
@@ -477,13 +317,15 @@ au BufWritePre *.rego Autoformat
 "------------------------------------------------------------------------------
 " Vim-go
 "------------------------------------------------------------------------------
-let g:go_fmt_fail_silently = 0
-let g:go_fmt_command = "gofmt" "Explicited the formater plugin (gofmt, goimports, goreturn...)
-let g:go_def_mode = 'gopls'
-let g:go_info_mode = 'gopls'
+" disable vim-go :GoDef short cut (gd)
+" this is handled by LanguageClient [LC]
+let g:go_def_mapping_enabled = 0
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+
 
 "------------------------------------------------------------------------------
 " python-mode 
 "------------------------------------------------------------------------------
-let g:SimpylFold_docstring_preview = 1
 let g:pymode_python = 'python3'

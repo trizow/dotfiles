@@ -228,7 +228,7 @@ set tw=500
 
 set ai "Auto indent
 set si "Smart indent
-set nowrap "Don't Wrap lines (it is stupid)
+"set nowrap "Don't Wrap lines (it is stupid)
 
 
 "------------------------------------------------------------------------------

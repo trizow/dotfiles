@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export TERM="xterm-256color"
@@ -10,6 +17,7 @@ export ZSH="${HOME}/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 #POWERLEVEL9K_MODE="nerdfont-complete"
 
 # Set list of themes to pick from when loading at random
@@ -98,9 +106,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
-alias python=/usr/bin/python3.7
+alias python=/usr/bin/python3.8
 #source  ~/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k.zsh-theme 
-source ~/.oh-my-zsh/custom/themes/powerlevel9k
 
 # Add findutils
 PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
@@ -109,7 +116,7 @@ PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
 export EDITOR="vim"
 
 # Go binary paths
-export GOPATH="$HOME/.go"
+export GOPATH="$HOME/go"
 export GOOS="linux"
 export GOROOT="$HOME/go"
 export GOBIN="$GOROOT/bin"
@@ -159,7 +166,7 @@ export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools/bin:$PATH"
 # adb connect
 #adb connect 100.115.92.2:5555
 
-export GOPATH="$HOME/.go"; export GOROOT="$HOME/go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+export GOPATH="$HOME/go"; export GOROOT="$HOME/go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 
 # The next line enables shell command completion for kix.
 if [ $+commands[kix] ]; then
@@ -167,3 +174,5 @@ if [ $+commands[kix] ]; then
   compinit
 fi
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

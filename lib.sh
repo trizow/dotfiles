@@ -104,7 +104,7 @@ function install_docker() {
 # dotfiles
 function install_dotfiles() {
     start_log
-    for i in .vim_go_runtime .zshrc .vimrc .tmux.conf .fzf.zsh; do 
+    for i in .zshrc .vimrc vimrc; do 
         if [ -e "$HOME/$i" ]; then
             if [ ! -f "$HOME/$i-backup" ]; then
                 echo "Backup of previous $i"

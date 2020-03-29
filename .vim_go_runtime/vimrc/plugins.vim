@@ -72,7 +72,7 @@ Plug 'sheerun/vim-polyglot'
 " Theme
 Plug 'morhetz/gruvbox'
 " CoC
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Initialize plugin system
 call plug#end()
@@ -80,13 +80,13 @@ call plug#end()
 "------------------------------------------------------------------------------
 " Custom color scheme
 "------------------------------------------------------------------------------
-"try
+try
+    colorscheme gruvbox
 "    colorscheme foursee
 "    colorscheme desert 
-"catch
-"endtry
+catch
+endtry
 
-colorscheme gruvbox
 
 "------------------------------------------------------------------------------
 " NERDTree

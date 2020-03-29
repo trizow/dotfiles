@@ -1,21 +1,14 @@
 # dotfiles
-My dotfiles.
+My dotfiles for Debian. This assumes the following cloud native dev envrionment:
 
-## Pre-req 
 1. [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
 2. [Vim-plugin](https://vimawesome.com/)
-3. [tmux](https://github.com/tmux/tmux/wiki)
-4. [fzf](https://github.com/junegunn/fzf)
+3. [gcloud](https://cloud.google.com/sdk/docs/downloads-apt-get)
+4. [Docker](https://docs.docker.com/install/linux/docker-ce/debian/)
 
 ## Install
 Installation shell script will backup and link dotfiles.
 ``
-$ ./isntall.sh
+$ ./install.sh
 ``
-
-After install download and update plugins for vim.
-``
-:PlugUpdate
-``
-
 

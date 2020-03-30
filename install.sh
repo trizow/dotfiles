@@ -3,6 +3,8 @@ set -e
 SCRIPTDIR=$(cd "$(dirname "$0")" || exit 1 ; pwd -P)
 source "${SCRIPTDIR}/lib.sh"
 
+CONFS=( .zshrc .vimrc vimrc )
+
 #### Component Installs ####
 install_apt
 install_oh-my-zsh

@@ -72,9 +72,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
- zsh-autosuggestions
-)
+plugins=()
 
 source $ZSH/oh-my-zsh.sh
 
@@ -137,12 +135,12 @@ if [ $TILIX_ID  ] || [ $VTE_VERSION  ]; then
     source /etc/profile.d/vte.sh
 fi
 export PATH="$PATH:\
-/home/troy.bebee/bin:\
-/home/troy.bebee/.linuxbrew/bin:\
-/home/troy.bebee/google-cloud-sdk/bin:\
-/home/troy.bebee/go/bin:\
-/home/troy.bebee/exercism/go:\
-/home/troy.bebee/code/kasna/go/bin:\
+${HOME}/bin:\
+${HOME}/.linuxbrew/bin:\
+${HOME}/google-cloud-sdk/bin:\
+${HOME}/go/bin:\
+${HOME}/exercism/go:\
+${HOME}/code/kasna/go/bin:\
 /usr/local/opt/findutils/libexec/gnubin:\
 /usr/local/sbin:\
 /usr/local/bin:\
@@ -152,10 +150,10 @@ export PATH="$PATH:\
 /usr/games:\
 /sbin:/bin:\
 /opt/android-studio/bin:\
-/home/troy.bebee/flutter/bin:\
-/home/troy.bebee/tools/bin:\
-/home/troy.bebee/.pulumi/bin:\
-/home/troy.bebee/.local/bin"
+${HOME}/flutter/bin:\
+${HOME}/tools/bin:\
+${HOME}/.pulumi/bin:\
+${HOME}/.local/bin"
 
 # add Pulumi to the PATH
 export PATH=$PATH:$HOME/.pulumi/bin
@@ -168,15 +166,7 @@ export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools/bin:$PATH"
 
 export GOPATH="$HOME/go"; export GOROOT="$HOME/go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 
-# The next line enables shell command completion for kix.
-if [ $+commands[kix] ]; then
-  kix completion zsh > /home/troy.bebee/.oh-my-zsh/completions/_kix
-  compinit
-fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-ZSH_THEME="powerlevel10k/powerlevel10k"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-ZSH_THEME="powerlevel10k/powerlevel10k"
 ZSH_THEME="powerlevel10k/powerlevel10k"

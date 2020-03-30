@@ -10,7 +10,7 @@ function find_install_dir() {
 function start_log() {
     echo
     echo "#################"
-    echo "Installing ${FUNCNAME[1]}" >&2
+    echo "Running ${FUNCNAME[1]}" >&2
     echo "#################"
 }
 
@@ -81,10 +81,14 @@ function install_vim-plug() {
 # [gcloud](https://cloud.google.com/sdk/docs/downloads-apt-get)
 function install_gcloud() {
     start_log
-    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-    sudo apt-get update
-    sudo apt-get -y install google-cloud-sdk
+    if [ ! "$(command -v gcloud 2>/dev/null)" ]; then
+        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+        sudo apt-get update
+        sudo apt-get -y install google-cloud-sdk
+    else
+        echo "Gcloud command already in PATH, skipping."
+    fi
     end_log
 }
 
@@ -92,34 +96,43 @@ function install_gcloud() {
 # [Docker](https://docs.docker.com/install/linux/docker-ce/debian/)
 function install_docker() {
     start_log
-    curl -fsSL "https://download.docker.com/linux/debian/gpg" | sudo apt-key add -
-    sudo add-apt-repository \
-        "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs)  stable"
+    if [ ! "$(command -v docker 2>/dev/null)" ]; then 
+        curl -fsSL "https://download.docker.com/linux/debian/gpg" | sudo apt-key add -
+        sudo add-apt-repository \
+            "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs)  stable"
 
-    sudo apt-get update
-    sudo apt-get -y install docker-ce docker-ce-cli containerd.io
+        sudo apt-get update
+        sudo apt-get -y install docker-ce docker-ce-cli containerd.io
+    else
+        echo "Docker command already in PATH, skipping."
+    fi
     end_log
 }
 
 # dotfiles
 function install_dotfiles() {
     start_log
-    for i in .zshrc .vimrc vimrc; do 
-        if [ -e "$HOME/$i" ]; then
-            if [ ! -f "$HOME/$i-backup" ]; then
-                echo "Backup of previous $i"
-                mv "$HOME/$i" "$HOME/$i-backup"
+    for i in "${CONFS[@]}"; do 
+        if [ -e "${HOME}/${i}" ]; then
+            if [ ! -f "${HOME}/${i}-backup" ]; then
+                echo "Backup of previous ${i}"
+                mv "${HOME}/${i}" "${HOME}/${i}-backup"
             fi
-            echo "Linking $SCRIPTDIR/$i to $HOME"
-            ln -sf "$SCRIPTDIR/$i" "$HOME/$i"
+            echo "Linking ${SCRIPTDIR}/${i} to ${HOME}"
+            ln -sf "${SCRIPTDIR}/${i}" "${HOME}/${i}"
         else 
-            echo "$i not found in $HOME, are you sure you have it installed?"
-            echo "Linking $SCRIPTDIR/$i to $HOME"
-            ln -sf "$SCRIPTDIR/$i" "$HOME/$i"
+            echo "${i} not found in ${HOME}, are you sure you have it installed?"
+            echo "Linking ${SCRIPTDIR}/${i} to ${HOME}"
 
+            ln -sf "${SCRIPTDIR}/${i}" "${HOME}/${i}"
         fi
     done
     end_log
+}
+
+# Install tilix config
+function install_tilix() {
+    dconf load /com/gexperts/Tilix/ < "${SCRIPTDIR}"/tilix.conf
 }
 
 # Change Shell

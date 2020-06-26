@@ -170,3 +170,20 @@ export GOPATH="$HOME/go"; export GOROOT="$HOME/go"; export PATH="$GOPATH/bin:$PA
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
+
+#export HTTPS_PROXY="http://localhost:3128"
+#export HTTP_PROXY="http://localhost:3128"
+#export https_proxy="http://localhost:3128"
+#export http_proxy="http://localhost:3128"
+#export AZURE_CLI_DISABLE_CONNECTION_VERIFICATION=1
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /Users/bebeet2/google-cloud-sdk/bin/anthoscli anthoscli
+export TERM=xterm-256color
+export KUBECONFIG=$HOME/.kube/config:$HOME/code/kasna/anthos-webinar/azure/aks-config:/Users/bebeet2/code/kasna/anthos-webinar/kops/onprem.context
+export LDFLAGS=-L/usr/local/Cellar/openssl@1.1/1.1.1g/lib
+export CPPFLAGS=-I/usr/local/Cellar/openssl@1.1/1.1.1g/include
+alias tt="tail -f ~/alpaca.log"
+#alias k="HTTPS_PROXY=localhost:8888 kubectl"
+#alias n="HTTPS_PROXY=localhost:8888 nomos"
+alias k="kubectl"
+alias x="kubectx"

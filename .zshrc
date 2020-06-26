@@ -72,7 +72,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=()
+plugins=(gcloud zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -104,7 +104,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
-alias python=/usr/bin/python3.8
+#alias python=/usr/bin/python3.8
 #source  ~/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k.zsh-theme 
 
 # Add findutils

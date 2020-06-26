@@ -11,6 +11,7 @@ install_oh-my-zsh
 install_p10k
 install_gcloud
 install_docker
+# install_code
 
 #### Link .zshrc files ####
 install_dotfiles

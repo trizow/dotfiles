@@ -104,7 +104,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
-#alias python=/usr/bin/python3.8
+#alias python=/usr/bin/python3
+alias python=/usr/local/bin/python3.8
 #source  ~/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k.zsh-theme 
 
 # Add findutils
@@ -115,9 +116,7 @@ export EDITOR="vim"
 
 # Go binary paths
 export GOPATH="$HOME/go"
-export GOOS="linux"
-export GOROOT="$HOME/go"
-export GOBIN="$GOROOT/bin"
+#export GOOS="linux"
 export PATH="$GOBIN:$GOPATH/bin:$PATH:/snap/bin"
 
 
@@ -164,9 +163,6 @@ export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools/bin:$PATH"
 # adb connect
 #adb connect 100.115.92.2:5555
 
-export GOPATH="$HOME/go"; export GOROOT="$HOME/go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
-
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -185,5 +181,12 @@ export CPPFLAGS=-I/usr/local/Cellar/openssl@1.1/1.1.1g/include
 alias tt="tail -f ~/alpaca.log"
 #alias k="HTTPS_PROXY=localhost:8888 kubectl"
 #alias n="HTTPS_PROXY=localhost:8888 nomos"
+export AZURE_CLI_DISABLE_CONNECTION_VERIFICATION=1
+
+# ANZx aliases
 alias k="kubectl"
 alias x="kubectx"
+alias dev="gcloud config set project anz-x-apps-dev-de4a56 && gcloud container clusters get-credentials anz-x-apps-dev-gke --region australia-southeast1"
+alias np="gcloud config set project anz-x-apps-np-e1bb39 && gcloud container clusters get-credentials anz-x-apps-np-gke --region australia-southeast1"
+alias platdev="gcloud config set project anz-x-apps-platdev-99bb42 && gcloud container clusters get-credentials anz-x-apps-platdev-gke --region australia-southeast1"
+alias prod="gcloud config set project anz-x-apps-prod-1e6a27 && gcloud container clusters get-credentials anz-x-apps-prod-gke --region australia-southeast1"
